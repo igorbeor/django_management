@@ -1,0 +1,12 @@
+{% extends './layout.html' %}
+
+{% block content %}
+    <h2>List of Companies:</h2>
+    <ul>
+        {% for company in company_list %}
+            <li><a href="{% url 'company-details' company.id %}">{{ company.id }}. {{ company.name }}.</a></li>
+        {% empty %} 
+            <li>Sorry, no companies in this list.</li>
+        {% endfor %}
+    </ul>
+{% endblock content %}

@@ -1,0 +1,8 @@
+{% extends './layout.html' %}
+
+{% block content %}
+    <h2>{{ company.name }}</h2>
+    {% if company.info %}
+        <p>{{ company.info }}<p>
+    {% endif %}
+{% endblock content %}
