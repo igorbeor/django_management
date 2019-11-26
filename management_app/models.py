@@ -8,6 +8,9 @@ class Company(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name_plural = 'Companies'
+
 
 class Manager(models.Model):
     first_name = models.CharField(max_length=64)
@@ -49,8 +52,7 @@ class Workplace(models.Model):
     )
     job = models.ForeignKey(
         Job,
-        on_delete=models.CASCADE,
-        related_name="job"
+        on_delete=models.CASCADE
     )
 
     def __str__(self):

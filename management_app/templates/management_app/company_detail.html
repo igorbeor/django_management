@@ -5,4 +5,20 @@
     {% if company.info %}
         <p>{{ company.info }}<p>
     {% endif %}
+    {% if company.job_set.all %}
+        <ul>
+        {% for job in company.job_set.all %}
+            <li>
+                {{job.name}}
+                <ul>
+                {% for workplace in job.workplace_set.all %}
+                    <li>{{workplace.name}}: {{workplace.employee.first_name}} {{workplace.employee.last_name}}</li>
+                {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        Детальная информация отсутствует
+    {% endif %}
 {% endblock content %}
