@@ -1,8 +1,16 @@
 from django.db import models
+import datetime
+
+
+# Contants for status field
+NEW = 1
+APPROVED = 2
+CANCELLED = 3
+FINISHED = 4
 
 
 class Company(models.Model):
-    name = models.CharField(max_length=64)
+    name = models.CharField(max_length=64, unique=True)
     info = models.TextField(max_length=1024, blank=True)
 
     def __str__(self):
@@ -43,8 +51,7 @@ class Job(models.Model):
         return self.name
 
 
-class Workplace(models.Model):
-    name = models.CharField(max_length=64)
+class WorkPlace(models.Model):
     employee = models.OneToOneField(
         Employee,
         null=True,
@@ -54,6 +61,40 @@ class Workplace(models.Model):
         Job,
         on_delete=models.CASCADE
     )
+    status = models.IntegerField(choices=(
+        (NEW, 'New'),
+        (APPROVED, 'Approved'),
+        (CANCELLED, 'Canceled'),
+        (FINISHED, 'Finished')
+    ), blank=True, null=True)
+
+    hours_per_week = models.IntegerField(blank=True)
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        unique_together = [['employee', 'job']]
+
+
+class WorkTime(models.Model):
+    date_start = models.DateTimeField()
+    date_end = models.DateTimeField()
+    status = models.IntegerField(choices=(
+        (NEW, 'New'),
+        (APPROVED, 'Approved'),
+        (CANCELLED, 'Canceled')
+    ), default=NEW)
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE,
+                                 related_name='worktimes')
+    workplace = models.ForeignKey(WorkPlace, on_delete=models.CASCADE,
+                                  related_name='worktimes')
+
+
+class Statistics(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE,
+                                 related_name='statistics')
+    workplace = models.ForeignKey(WorkPlace, on_delete=models.CASCADE,
+                                  related_name='statistics')
+    hours_total = models.IntegerField()
+    timestamp = models.DateTimeField(auto_now_add=True)

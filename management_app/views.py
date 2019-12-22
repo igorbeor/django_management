@@ -1,5 +1,9 @@
 from django.views.generic import ListView, DetailView
 from .models import Company
+import logging
+
+logger = logging.getLogger('my_logger')
+logger.setLevel(logging.INFO)
 
 
 class CompanyDetailView(DetailView):
